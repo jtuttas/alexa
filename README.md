@@ -12,3 +12,7 @@ Anschließend können Sie Alexa fragen:
 - "Wie ist die Adresse"
 - "Wie ist der Name meines Lieblingslehrer" ;-)
 
+**oder auch:**
+- "Alexa frage Schule, wie sind meine Aufgaben"
+- "Alexa frage Schule, wie ist die Telefonnummer"
+
