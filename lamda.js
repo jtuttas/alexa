@@ -43,7 +43,7 @@ exports.handler = (event, context, callback) => {
                     case "telefon":
                         context.succeed(
                                 generateResponse(
-                                        buildSpeechletResponse(`Die Schule erreichen Sie telefonisch über 051164619811`, false),
+                                        buildSpeechletResponse(`Die Schule erreichen Sie telefonisch über <say-as interpret-as="digits">051164619811</say-as>.`, false),
                                         {}
                                 ))
                         break;
@@ -88,7 +88,7 @@ exports.handler = (event, context, callback) => {
                                 }
                                 context.succeed(
                                         generateResponse(
-                                                buildSpeechletResponse(r, true),
+                                                buildSpeechletResponse(r, false),
                                                 {}
                                         ))
                             });
@@ -127,7 +127,48 @@ exports.handler = (event, context, callback) => {
                                 }
                                 context.succeed(
                                         generateResponse(
-                                                buildSpeechletResponse(r, true),
+                                                buildSpeechletResponse(r, false),
+                                                {}
+                                        ))
+                            });
+                        });
+                        break;
+                    case "nachrichten":
+                        var alexa = event;
+                        var accessToken = alexa.context.System.user.accessToken;
+                        var aarray = accessToken.split("@");
+                        var server = aarray[0];
+                        var path = aarray[1];
+                        var token = aarray[2];
+                        var userid = aarray[3];
+                        server = server.substr(server.indexOf("://") + 3);
+
+                        path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction=core_message_data_for_messagearea_conversations&moodlewsrestformat=json&userid='+userid;
+
+                        http.get({
+                            host: server,
+                            path: path
+                        }, function (response) {
+                            // Continuously update stream with data
+                            var body = '';
+                            response.on('data', function (d) {
+                                body += d;
+                            });
+                            response.on('end', function () {
+                                var r = "Sie haben folgende Nachrichten <break time=\"500ms\"/>";
+                                var data = JSON.parse(body);
+                                if (!data || data.contacts.length == 0) {
+                                    r = "Sie haben aktuell keine neuen Nachrichten.";
+                                }
+                                for (i = 0; i < data.contacts.length; i++) {
+                                    if (!data.contacts[i].isread) {
+                                        r += "Neue Nachricht von "+data.contacts[i].fullname+".<break time=\"400ms\"/>" +data.contacts[i].lastmessage+"<break time=\"500ms\"/>";
+                                    }
+                                    //console.log(ts);
+                                }
+                                context.succeed(
+                                        generateResponse(
+                                                buildSpeechletResponse(r, false),
                                                 {}
                                         ))
                             });
@@ -177,8 +218,8 @@ buildSpeechletResponse = (outputText, shouldEndSession) => {
 
     return {
         outputSpeech: {
-            type: "PlainText",
-            text: outputText
+           type: "SSML",
+           ssml: "<speak>"+outputText+"</speak>"
         },
         shouldEndSession: shouldEndSession
     }

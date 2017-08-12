@@ -61,7 +61,7 @@ var token=aarray[2];
 var userid=aarray[3];
 server=server.substr(server.indexOf("://")+3);
 
-path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction=core_enrol_get_users_courses&moodlewsrestformat=json&userid='+userid;
+path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction=core_message_data_for_messagearea_conversations&moodlewsrestformat=json&userid='+userid;
 
 console.log("AccessToken="+accessToken);
 console.log("Server="+server);
@@ -85,8 +85,8 @@ http.get({
     response.on('end', function () {
         //console.log(body);
         var data = JSON.parse(body);
-        for (i=0;i<data.length;i++) {
-            console.log(data[i].fullname);
+        for (i=0;i<data.contacts.length;i++) {
+            console.log(data.contacts[i].lastmessage);
             //console.log(ts);
         }
     });

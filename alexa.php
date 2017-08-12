@@ -69,8 +69,11 @@
 					<input type="hidden" name="redirect_uri" value="<?php echo $_REQUEST["redirect_uri"]; ?>">
 					<input type="text" class="form-control url" name="Server" placeholder="Moodle Server" required="" value="https://moodle.mm-bbs.de" />
 					<input type="text" class="form-control url" name="Path" placeholder="Moodle Path" required="" value="/moodle" />					
-					<input type="text" class="form-control" name="Username" placeholder="Username" required="" autofocus="" />
-					<input type="password" class="form-control" name="Password" placeholder="Password" required=""/>
+					<br/>
+					<label for="username">Moodle Username:</label>
+					<input type="text" class="form-control" name="Username" placeholder="Username" required="" autofocus="" id="username" />
+					<label for="password">Moodle Password:</label>
+					<input type="password" class="form-control" name="Password" placeholder="Password" required="" id="password"/>
 					<?php
 						if ($_REQUEST["msg"]) {
 							echo '<p class="error">'.$_REQUEST["msg"].'</p>';
