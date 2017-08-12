@@ -1,4 +1,4 @@
-AMAZON.HelpIntent Fragen Sie mich nach dem Namen ihres Lieblingslehrers
+AMAZON.HelpIntent Fragen Sie mich nach meinen Aufgabe
 lieblingslehrer wie ist der name meines lieblingslehrers
 lieblingslehrer Wie heißt mein Lieblingslehrer
 lieblingslehrer Wer ist mein Lieblingslehrer
@@ -15,6 +15,9 @@ adresse Wie lautet die Adresse der Schule
 adresse Wo finde ich die mmbbs
 kurse in welchen Kursen bin ich
 kurse was sind meine Kurse
+nachrichten habe ich neue Nachrichten
+nachrichten wie sind meine Nachrichten
+nachrichten gibt es neue Nachrichten
 
 
 
