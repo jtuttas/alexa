@@ -36,14 +36,14 @@ exports.handler = (event, context, callback) => {
                     case "schulleiter":
                         context.succeed(
                                 generateResponse(
-                                        buildSpeechletResponse(`Der Schulleiter heißt Herr Mais`, false),
+                                        buildSpeechletResponse(`Der Schulleiter heißt Herr Maiss`, false),
                                         {}
                                 ))
                         break;
                     case "telefon":
                         context.succeed(
                                 generateResponse(
-                                        buildSpeechletResponse(`Die Schule erreichen Sie telefonisch über <say-as interpret-as=\"telephone\">051164619811</say-as>`, false),
+                                        buildSpeechletResponse(`Die Schule erreichen Sie telefonisch über 051164619811`, false),
                                         {}
                                 ))
                         break;
