@@ -1,0 +1,20 @@
+AMAZON.HelpIntent Fragen Sie mich nach dem Namen ihres Lieblingslehrers
+lieblingslehrer wie ist der name meines lieblingslehrers
+lieblingslehrer Wie heißt mein Lieblingslehrer
+lieblingslehrer Wer ist mein Lieblingslehrer
+schulleiter Wie heißt der Schulleiter
+schulleiter Wie heißt der Schulleiter der Schule
+schulleiter Wie ist der Name des Schulleiters
+aufgaben wie sind meine Aufgaben
+aufgaben welche Aufgaben habe ich
+aufgaben wie sind meine Termine
+telefon Wie ist die telefonnummer der schule
+telefon Wie ist die telefonnummer
+adresse Wo ist die schule
+adresse Wie lautet die Adresse der Schule
+adresse Wo finde ich die mmbbs
+kurse in welchen Kursen bin ich
+kurse was sind meine Kurse
+
+
+
