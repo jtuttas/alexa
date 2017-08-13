@@ -160,11 +160,16 @@ exports.handler = (event, context, callback) => {
                                 if (!data || data.contacts.length == 0) {
                                     r = "Sie haben aktuell keine neuen Nachrichten.";
                                 }
+                                var found=false;
                                 for (i = 0; i < data.contacts.length; i++) {
                                     if (!data.contacts[i].isread) {
                                         r += "Neue Nachricht von "+data.contacts[i].fullname+".<break time=\"400ms\"/>" +data.contacts[i].lastmessage+"<break time=\"500ms\"/>";
+                                        found=true;
                                     }
                                     //console.log(ts);
+                                }
+                                if (!found) {
+                                    r=" Sie haben keine neuen Nachrichten.";
                                 }
                                 context.succeed(
                                         generateResponse(
