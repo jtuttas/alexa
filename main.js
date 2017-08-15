@@ -53,42 +53,52 @@ var alexa = {
   "version": "1.0"
 };
 
-var accessToken = alexa.context.System.user.accessToken;
-var aarray = accessToken.split("@");
-var server=aarray[0];
-var path=aarray[1];
-var token=aarray[2];
-var userid=aarray[3];
-server=server.substr(server.indexOf("://")+3);
-
-path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction=core_message_data_for_messagearea_conversations&moodlewsrestformat=json&userid='+userid;
-
-console.log("AccessToken="+accessToken);
-console.log("Server="+server);
-console.log("token="+token);
-console.log("path="+path);
-console.log("userid="+userid);
-
-
-
-http.get({
-    host: server,
-    //path: '/moodle/webservice/rest/server.php?wstoken=211db76a2380fc51f8f040c9164ce3e4&wsfunction=core_calendar_get_action_events_by_timesort&moodlewsrestformat=json'
-    //       /moodle/webservice/rest/server.php?wstoken=9d5beb1b7b2fb484270e74a5d5021c68&wsfunction=core_calendar_get_action_events_by_timesort&moodlewsrestformat=json
-    path: path
-}, function (response) {
-    // Continuously update stream with data
-    var body = '';
-    response.on('data', function (d) {
-        body += d;
-    });
-    response.on('end', function () {
-        //console.log(body);
-        var data = JSON.parse(body);
-        for (i=0;i<data.contacts.length;i++) {
-            console.log(data.contacts[i].lastmessage);
-            //console.log(ts);
-        }
-    });
+callMoodle(alexa,true,'core_message_data_for_messagearea_conversations',function callback(data) {
+  console.log(JSON.stringify(data));  
+}, function error(msg) {
+  console.log("Fehler: "+msg);  
 });
+
+function callMoodle(alexaRequest,withid,wsfunction,callback,error) {
+    var accessToken = alexaRequest.context.System.user.accessToken;
+    var aarray = accessToken.split("@");
+    var server=aarray[0];
+    var path=aarray[1];
+    var token=aarray[2];
+    var userid=aarray[3];
+    server=server.substr(server.indexOf("://")+3);
+
+    path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction='+wsfunction+'&moodlewsrestformat=json';
+
+    if (withid) {
+        path+='&userid='+userid;
+    }
+    
+    /*
+    console.log("AccessToken="+accessToken);
+    console.log("Server="+server);
+    console.log("token="+token);
+    console.log("path="+path);
+    console.log("userid="+userid);
+    */
+    http.get({
+        host: server,
+        path: path
+    }, function (response) {
+        // Continuously update stream with data
+        var body = '';
+        response.on('data', function (d) {
+            body += d;
+        });
+        response.on('end', function () {
+            var data = JSON.parse(body);
+            if (data.exception) {
+                error("Ich konnte Sie nicht anmelden, bitte deaktivieren Sie den Skill in ihrer alexa App und aktivieren sie ihn erneut");
+            }
+            else {
+                callback(data);
+            }
+        });
+    });
+}
 
