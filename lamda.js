@@ -206,6 +206,15 @@ generateResponse = (speechletResponse, sessionAttributes) => {
 
 }
 
+
+/**
+ * 
+ * @param {type} alexaRequest JSON von Alexa
+ * @param {type} withid boolean, true=Moodle Abfrage mit userid
+ * @param {type} wsfunction aufzurufenden Moodle Methode
+ * @param {type} callback Callback bei Erfolg
+ * @param {type} error Fehlerbehandlung
+ */
 function callMoodle(alexaRequest,withid, wsfunction, callback, error) {
     var accessToken = alexaRequest.context.System.user.accessToken;
     var aarray = accessToken.split("@");
