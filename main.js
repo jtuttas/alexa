@@ -1,5 +1,4 @@
 
-
 var http = require('https');
 
 // https://www.efa.de/efaws2/default/XML_DM_REQUEST?sessionID=0&requestID=0&language=de&useRealtime=1&coordOutputFormat=WGS84[DD.ddddd]&locationServerActive=1&mode=direct&dmLineSelectionAll=1&depType=STOPEVENTS&useAllStops=1&command=null&calcOneDirection=1&uuid=GVH_APP&type_dm=stop&name_dm=25001795&itdTime=1514&itdDate=20170731&mId=efa_uestra
