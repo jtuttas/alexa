@@ -1,5 +1,6 @@
 # MMBbS Alexa Skill
 <img src="login.PNG">
+
 Melden Sie sich mit ihren Zugangsdaten am System an.
 
 Sie starten den Skill mit "Alexa starte Schule"!
@@ -15,4 +16,5 @@ Anschließend können Sie Alexa fragen:
 **oder auch:**
 - "Alexa frage Schule, wie sind meine Aufgaben"
 - "Alexa frage Schule, wie ist die Telefonnummer"
+- "Alexa frage Schule nach der Adresse"
 

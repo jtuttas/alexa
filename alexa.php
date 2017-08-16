@@ -84,6 +84,7 @@
 			</div>
 		</div>
 		<?php
+			//Logger
 			error_log("1 Alexa receive:".print_r($_REQUEST,TRUE)."\n", 3, "/var/tmp/errors.log");
 			
 		?>
