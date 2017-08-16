@@ -14,7 +14,7 @@ var alexa = {
     "attributes": {},
     "user": {
       "userId": "amzn1.ask.account.AH2GE2AOBQNHBLE4WDAZO6U6VMGBJLNZJWC37S7HTNQ4HWPSLW2NYCJX77S7DJZP4Z36OMGSMZDHQHMFQXQRUFVBPH4JNL7B4BL3IO6P5DMOXZUGWKMAKSKEMF5PFGCRRWHU3CFZ2B4JKXC7DPKKJU33JSORXNNAP2FNXAFHTTQJSIMKTHPWHZZ4C35H4RMDPAVUVFJ776OK5GQ",
-      "accessToken": "https://moodle.mm-bbs.de/moodle@211db76a2380fc51f8f040c9164ce3e4§5465"
+      "accessToken": "https://moodle.mm-bbs.de/moodle@211db76a2380fc51f8f040c9164ce3e4@5465"
     }
   },
   "request": {
