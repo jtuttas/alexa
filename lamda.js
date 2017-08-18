@@ -215,26 +215,41 @@ generateResponse = (speechletResponse, sessionAttributes) => {
  * @param {type} callback Callback bei Erfolg
  * @param {type} error Fehlerbehandlung
  */
-function callMoodle(alexaRequest,withid, wsfunction, callback, error) {
+function callMoodle(alexaRequest,withid,wsfunction,callback,error) {
     var accessToken = alexaRequest.context.System.user.accessToken;
     var aarray = accessToken.split("@");
-    var server = aarray[0];
-    var path = aarray[1];
-    var token = aarray[2];
-    var userid = aarray[3];
-    server = server.substr(server.indexOf("://") + 3);
+    var server=aarray[0];
+    var path=aarray[1];
+    var token=aarray[2];
+    var userid=aarray[3];
+    server=server.substr(server.indexOf("://")+3);
 
-    path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction=' + wsfunction + '&moodlewsrestformat=json';
+     switch (wsfunction) {
+         case 'core_calendar_get_action_events_by_timesort':
+            var date = new Date();
+            var dvalue= ""+date.getTime()/1000;
+            dvalue=dvalue.substr(0,dvalue.indexOf("."));
+            console.log("value="+dvalue);
+
+            path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction='+wsfunction+'&moodlewsrestformat=json&timesortfrom='+dvalue;
+            break;
+         default :
+            path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction='+wsfunction+'&moodlewsrestformat=json';
+             
+     }
+
+    // console.log(path);
     if (withid) {
-        path+= '&userid=' + userid;
+        path+='&userid='+userid;
     }
+    
     /*
-     console.log("AccessToken="+accessToken);
-     console.log("Server="+server);
-     console.log("token="+token);
-     console.log("path="+path);
-     console.log("userid="+userid);
-     */
+    console.log("AccessToken="+accessToken);
+    console.log("Server="+server);
+    console.log("token="+token);
+    console.log("path="+path);
+    console.log("userid="+userid);
+    */
     http.get({
         host: server,
         path: path
@@ -248,7 +263,8 @@ function callMoodle(alexaRequest,withid, wsfunction, callback, error) {
             var data = JSON.parse(body);
             if (data.exception) {
                 error("Ich konnte Sie nicht anmelden, bitte deaktivieren Sie den Skill in ihrer alexa App und aktivieren sie ihn erneut");
-            } else {
+            }
+            else {
                 callback(data);
             }
         });

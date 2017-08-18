@@ -21,7 +21,7 @@ var alexa = {
     "type": "IntentRequest",
     "requestId": "EdwRequestId.e4e80b11-84e1-424a-98a5-3bba82732db6",
     "intent": {
-      "name": "aufgaben",
+      "name": "kurse",
       "slots": {}
     },
     "locale": "de-DE",
@@ -62,8 +62,21 @@ function callMoodle(alexaRequest,withid,wsfunction,callback,error) {
     var userid=aarray[3];
     server=server.substr(server.indexOf("://")+3);
 
-    path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction='+wsfunction+'&moodlewsrestformat=json';
+     switch (wsfunction) {
+         case 'core_calendar_get_action_events_by_timesort':
+            var date = new Date();
+            var dvalue= ""+date.getTime()/1000;
+            dvalue=dvalue.substr(0,dvalue.indexOf("."));
+            console.log("value="+dvalue);
 
+            path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction='+wsfunction+'&moodlewsrestformat=json&timesortfrom='+dvalue;
+            break;
+         default :
+            path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction='+wsfunction+'&moodlewsrestformat=json';
+             
+     }
+
+    // console.log(path);
     if (withid) {
         path+='&userid='+userid;
     }
