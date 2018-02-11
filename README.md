@@ -18,3 +18,7 @@ Anschließend können Sie Alexa fragen:
 - "Alexa frage Schule, wie ist die Telefonnummer"
 - "Alexa frage Schule nach der Adresse"
 
+[![Alexa Skill in Aktion](http://img.youtube.com/vi/iQ6ZOF30VaI/0.jpg)](http://www.youtube.com/watch?v=iQ6ZOF30VaI)
+# Wie es funktioniert
+<img src="Alexa.png">
+
