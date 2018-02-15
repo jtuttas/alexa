@@ -12,104 +12,121 @@ exports.handler = (event, context, callback) => {
 
             case "LaunchRequest":
                 // Launch Request
-                console.log(`LAUNCH REQUEST`)
-                context.succeed(
+                console.log(`LAUNCH REQUEST`);
+                if (event.session.user.accessToken == undefined) {
+                    context.succeed(
                         generateResponse(
-                                buildSpeechletResponse("Willkommenn zur multi media berufsbildende Schule in Hannover", false),
-                                {}
+                            buildSpeechletResponse(`Du kannst diesen Skill nur verwenden, wenn Du in die Alexa App gehst und Dein Konto mit deinen Anmeldedaten verknüpfst und die Einrichtung abschließt.`, true),
+                            {}
+                        ))
+                }
+                else {
+                    context.succeed(
+                        generateResponse(
+                            buildSpeechletResponse("Willkommenn zur multi media berufsbildende Schule in Hannover", false),
+                            {}
                         )
-                        )
+                    )
+                }
                 break;
 
             case "IntentRequest":
                 // Intent Request
-                console.log(`INTENT REQUEST`)
+                console.log(`INTENT REQUEST name=:` + event.request.intent.name + ' accessToken=' + event.session.user.accessToken);
 
-                switch (event.request.intent.name) {
-                    case "lieblingslehrer":
-                        context.succeed(
-                                generateResponse(
-                                        buildSpeechletResponse(`ihr Lieblingslehrer ist Dr. Jörg Tuttas`, false),
-                                        {}
-                                ))
-                        break;
-                    case "schulleiter":
-                        context.succeed(
-                                generateResponse(
-                                        buildSpeechletResponse(`Der Schulleiter heißt Herr Maiss`, false),
-                                        {}
-                                ))
-                        break;
-                    case "telefon":
-                        context.succeed(
-                                generateResponse(
-                                        buildSpeechletResponse(`Die Schule erreichen Sie telefonisch über <say-as interpret-as="digits">051164619811</say-as>.`, false),
-                                        {}
-                                ))
-                        break;
-                    case "adresse":
-                        context.succeed(
-                                generateResponse(
-                                        buildSpeechletResponse(`Sie finden die Schule am Expo PLaza 3 in Hannover`, false),
-                                        {}
-                                ))
-                        break;
-                    case "aufgaben":
-                        callMoodle(event,false, 'core_calendar_get_action_events_by_timesort', function callback(data) {
-                            var r = "Hier sind ihre aktuellen Aufgaben: <break time=\"500ms\"/>";
-                            
-                            if (!data || data.events.length == 0) {
-                                r = "Sie haben aktuell keine Aufgaben";
-                            }
-                            for (i = 0; i < data.events.length; i++) {
-                                var ts = new Date(data.events[i].timestart * 1000);
-                                r += data.events[i].name.substr(0, data.events[i].name.length - 1) + " bis <say-as interpret-as=\"date\">" + ts.getDate() + "." + (ts.getMonth() + 1) + "." + ts.getFullYear() + "</say-as> im Kurs " + data.events[i].course.fullname + "<break time=\"500ms\"/>";
-                                //console.log(ts);
-                            }
+                if (event.session.user.accessToken == undefined) {
+                    context.succeed(
+                        generateResponse(
+                            buildSpeechletResponse(`Sie müssen sich erst in Moodle Anmelden, gehen Sie in die Alexa App und aktivieren Sie den Skill.`, true),
+                            {}
+                        ))
+                }
+                else {
+                    switch (event.request.intent.name) {
+                        case "lieblingslehrer":
                             context.succeed(
+                                generateResponse(
+                                    buildSpeechletResponse(`ihr Lieblingslehrer ist Dr. Jörg Tuttas`, false),
+                                    {}
+                                ))
+                            break;
+                        case "schulleiter":
+                            context.succeed(
+                                generateResponse(
+                                    buildSpeechletResponse(`Der Schulleiter heißt Herr Maiss`, false),
+                                    {}
+                                ))
+                            break;
+                        case "telefon":
+                            context.succeed(
+                                generateResponse(
+                                    buildSpeechletResponse(`Die Schule erreichen Sie telefonisch über <say-as interpret-as="digits">051164619811</say-as>.`, false),
+                                    {}
+                                ))
+                            break;
+                        case "adresse":
+                            context.succeed(
+                                generateResponse(
+                                    buildSpeechletResponse(`Sie finden die Schule am Expo PLaza 3 in Hannover`, false),
+                                    {}
+                                ))
+                            break;
+                        case "aufgaben":
+                            callMoodle(event, false, 'core_calendar_get_action_events_by_timesort', function callback(data) {
+                                var r = "Hier sind ihre aktuellen Aufgaben: <break time=\"500ms\"/>";
+
+                                if (!data || data.events.length == 0) {
+                                    r = "Sie haben aktuell keine Aufgaben";
+                                }
+                                for (i = 0; i < data.events.length; i++) {
+                                    var ts = new Date(data.events[i].timestart * 1000);
+                                    r += data.events[i].name.substr(0, data.events[i].name.length - 1) + " bis <say-as interpret-as=\"date\">" + ts.getDate() + "." + (ts.getMonth() + 1) + "." + ts.getFullYear() + "</say-as> im Kurs " + data.events[i].course.fullname + "<break time=\"500ms\"/>";
+                                    //console.log(ts);
+                                }
+                                context.succeed(
                                     generateResponse(
-                                            buildSpeechletResponse(r, false),
-                                            {}
+                                        buildSpeechletResponse(r, false),
+                                        {}
                                     ))
 
-                        }, function error(msg) {
-                            context.succeed(
+                            }, function error(msg) {
+                                context.succeed(
                                     generateResponse(
-                                            buildSpeechletResponse(msg, false),
-                                            {}
+                                        buildSpeechletResponse(msg, false),
+                                        {}
                                     ))
-                        });
+                            });
 
-                        break;
-                    case "kurse":
-                        callMoodle(event,true, 'core_enrol_get_users_courses', function callback(data) {
-                            var r = "Sie sind in folgenden Kursen <break time=\"500ms\"/>";
-                            if (!data || data.length == 0) {
-                                r = "Sie sind aktuell in keinen Kursen";
-                            }
-                            for (i = 0; i < data.length; i++) {
-                                r += data[i].fullname + "<break time=\"500ms\"/>";
-                                //console.log(ts);
-                            }
-                            context.succeed(
+                            break;
+                        case "kurse":
+                            callMoodle(event, true, 'core_enrol_get_users_courses', function callback(data) {
+                                var r = "Sie sind in folgenden Kursen <break time=\"500ms\"/>";
+                                if (!data || data.length == 0) {
+                                    r = "Sie sind aktuell in keinen Kursen";
+                                }
+                                for (i = 0; i < data.length; i++) {
+                                    r += data[i].fullname + "<break time=\"500ms\"/>";
+                                    //console.log(ts);
+                                }
+                                context.succeed(
                                     generateResponse(
-                                            buildSpeechletResponse(r, false),
-                                            {}
+                                        buildSpeechletResponse(r, false),
+                                        {}
                                     ))
-                        }, function error(msg) {
-                            context.succeed(
+                            }, function error(msg) {
+                                context.succeed(
                                     generateResponse(
-                                            buildSpeechletResponse(msg, false),
-                                            {}
+                                        buildSpeechletResponse(msg, false),
+                                        {}
                                     ))
-                        });
+                            });
 
-                        break;
-                    case "nachrichten":
+                            break;
+                        case "nachrichten":
 
-                        callMoodle(event,true, 'core_message_data_for_messagearea_conversations', function callback(data) {
-                            var r = "Sie haben folgende Nachrichten <break time=\"500ms\"/>";
-                                
+                            callMoodle(event, true, 'core_message_data_for_messagearea_conversations', function callback(data) {
+                                var r = "Sie haben folgende Nachrichten <break time=\"500ms\"/>";
+
                                 if (!data || data.contacts.length == 0) {
                                     r = "Sie haben aktuell keine neuen Nachrichten.";
                                 }
@@ -125,40 +142,49 @@ exports.handler = (event, context, callback) => {
                                     r = " Sie haben keine neuen Nachrichten.";
                                 }
                                 context.succeed(
-                                        generateResponse(
-                                                buildSpeechletResponse(r, false),
-                                                {}
-                                        ))
-                        }, function error(msg) {
-                            context.succeed(
                                     generateResponse(
-                                            buildSpeechletResponse(msg, false),
-                                            {}
+                                        buildSpeechletResponse(r, false),
+                                        {}
                                     ))
-                        });
+                            }, function error(msg) {
+                                context.succeed(
+                                    generateResponse(
+                                        buildSpeechletResponse(msg, false),
+                                        {}
+                                    ))
+                            });
 
-                        break;
-                    case "AMAZON.StopIntent":
-                        context.succeed(
+                            break;
+                        case "AMAZON.CancelIntent":
+                        case "AMAZON.StopIntent":
+                            context.succeed(
                                 generateResponse(
-                                        buildSpeechletResponse(`Auf wiedersehen, ich wünsche einen schönen Schultag`, true),
-                                        {}
+                                    buildSpeechletResponse(`Auf wiedersehen, ich wünsche einen schönen Schultag`, true),
+                                    {}
                                 ))
-                        break;
-                    case 'Unhandled':
-                        context.succeed(
+                            break;
+                        case "AMAZON.HelpIntent":
+                            context.succeed(
                                 generateResponse(
-                                        buildSpeechletResponse(`Darauf habe ich leider keine Antwort!`, true),
-                                        {}
+                                    buildSpeechletResponse(`Du kannst Deine aktuellen Aufgaben aus dem Moodle System abfragen, sage hierzu, wie sind meine Aufgaben? Oder in welchen Kursen du bist, sage hierzu, in in welchen Kursen bin ich? Oder aber auch welche Nachrichten Du im System hast, sage hierzu, habe ich neue Nachrichten?. Was möchtest Du tun?`, false),
+                                    {}
                                 ))
-                        break;
-                    default:
-                        context.succeed(
+                            break;
+                        case 'Unhandled':
+                            context.succeed(
                                 generateResponse(
-                                        buildSpeechletResponse(`Darauf habe ich keine Antwort`, false),
-                                        {}
+                                    buildSpeechletResponse(`Darauf habe ich leider keine Antwort!`, true),
+                                    {}
+                                ))
+                            break;
+                        default:
+                            context.succeed(
+                                generateResponse(
+                                    buildSpeechletResponse(`Darauf habe ich keine Antwort`, false),
+                                    {}
                                 ))
 
+                    }
                 }
 
                 break;
@@ -167,10 +193,10 @@ exports.handler = (event, context, callback) => {
                 // Session Ended Request
                 console.log(`SESSION ENDED REQUEST`)
                 context.succeed(
-                        generateResponse(
-                                buildSpeechletResponse(`Auf wiedersehen, ich wünsche einen schönen Schultag!`, true),
-                                {}
-                        ))
+                    generateResponse(
+                        buildSpeechletResponse(`Auf wiedersehen, ich wünsche einen schönen Schultag!`, true),
+                        {}
+                    ))
                 break;
 
             default:
@@ -215,34 +241,34 @@ generateResponse = (speechletResponse, sessionAttributes) => {
  * @param {type} callback Callback bei Erfolg
  * @param {type} error Fehlerbehandlung
  */
-function callMoodle(alexaRequest,withid,wsfunction,callback,error) {
+function callMoodle(alexaRequest, withid, wsfunction, callback, error) {
     var accessToken = alexaRequest.context.System.user.accessToken;
     var aarray = accessToken.split("@");
-    var server=aarray[0];
-    var path=aarray[1];
-    var token=aarray[2];
-    var userid=aarray[3];
-    server=server.substr(server.indexOf("://")+3);
+    var server = aarray[0];
+    var path = aarray[1];
+    var token = aarray[2];
+    var userid = aarray[3];
+    server = server.substr(server.indexOf("://") + 3);
 
-     switch (wsfunction) {
-         case 'core_calendar_get_action_events_by_timesort':
+    switch (wsfunction) {
+        case 'core_calendar_get_action_events_by_timesort':
             var date = new Date();
-            var dvalue= ""+date.getTime()/1000;
-            dvalue=dvalue.substr(0,dvalue.indexOf("."));
-            console.log("value="+dvalue);
+            var dvalue = "" + date.getTime() / 1000;
+            dvalue = dvalue.substr(0, dvalue.indexOf("."));
+            console.log("value=" + dvalue);
 
-            path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction='+wsfunction+'&moodlewsrestformat=json&timesortfrom='+dvalue;
+            path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction=' + wsfunction + '&moodlewsrestformat=json&timesortfrom=' + dvalue;
             break;
-         default :
-            path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction='+wsfunction+'&moodlewsrestformat=json';
-             
-     }
+        default:
+            path += '/webservice/rest/server.php?wstoken=' + token + '&wsfunction=' + wsfunction + '&moodlewsrestformat=json';
+
+    }
 
     // console.log(path);
     if (withid) {
-        path+='&userid='+userid;
+        path += '&userid=' + userid;
     }
-    
+
     /*
     console.log("AccessToken="+accessToken);
     console.log("Server="+server);
