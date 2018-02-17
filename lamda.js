@@ -16,7 +16,7 @@ exports.handler = (event, context, callback) => {
                 if (event.session.user.accessToken == undefined) {
                     context.succeed(
                         generateResponse(
-                            buildSpeechletResponse(`Du kannst diesen Skill nur verwenden, wenn Du in die Alexa App gehst und Dein Konto mit deinen Anmeldedaten verknüpfst und die Einrichtung abschließt.`, true),
+                            buildLinkedSpeechletResponse(`Du kannst diesen Skill nur verwenden, wenn Du in die Alexa App gehst und Dein Konto mit deinen Anmeldedaten verknüpfst und die Einrichtung abschließt.`, true),
                             {}
                         ))
                 }
@@ -46,28 +46,28 @@ exports.handler = (event, context, callback) => {
                         case "lieblingslehrer":
                             context.succeed(
                                 generateResponse(
-                                    buildSpeechletResponse(`ihr Lieblingslehrer ist Dr. Jörg Tuttas`, false),
+                                    buildSpeechletResponse(`ihr Lieblingslehrer ist Dr. Jörg Tuttas`, true),
                                     {}
                                 ))
                             break;
                         case "schulleiter":
                             context.succeed(
                                 generateResponse(
-                                    buildSpeechletResponse(`Der Schulleiter heißt Herr Maiss`, false),
+                                    buildSpeechletResponse(`Der Schulleiter heißt Herr Maiss`, true),
                                     {}
                                 ))
                             break;
                         case "telefon":
                             context.succeed(
                                 generateResponse(
-                                    buildSpeechletResponse(`Die Schule erreichen Sie telefonisch über <say-as interpret-as="digits">051164619811</say-as>.`, false),
+                                    buildSpeechletResponse(`Die Schule erreichen Sie telefonisch über <say-as interpret-as="digits">051164619811</say-as>.`, true),
                                     {}
                                 ))
                             break;
                         case "adresse":
                             context.succeed(
                                 generateResponse(
-                                    buildSpeechletResponse(`Sie finden die Schule am Expo PLaza 3 in Hannover`, false),
+                                    buildSpeechletResponse(`Sie finden die Schule am Expo PLaza 3 in Hannover`, true),
                                     {}
                                 ))
                             break;
@@ -85,14 +85,14 @@ exports.handler = (event, context, callback) => {
                                 }
                                 context.succeed(
                                     generateResponse(
-                                        buildSpeechletResponse(r, false),
+                                        buildSpeechletResponse(r, true),
                                         {}
                                     ))
 
                             }, function error(msg) {
                                 context.succeed(
                                     generateResponse(
-                                        buildSpeechletResponse(msg, false),
+                                        buildSpeechletResponse(msg, true),
                                         {}
                                     ))
                             });
@@ -110,13 +110,13 @@ exports.handler = (event, context, callback) => {
                                 }
                                 context.succeed(
                                     generateResponse(
-                                        buildSpeechletResponse(r, false),
+                                        buildSpeechletResponse(r, true),
                                         {}
                                     ))
                             }, function error(msg) {
                                 context.succeed(
                                     generateResponse(
-                                        buildSpeechletResponse(msg, false),
+                                        buildSpeechletResponse(msg, true),
                                         {}
                                     ))
                             });
@@ -143,13 +143,13 @@ exports.handler = (event, context, callback) => {
                                 }
                                 context.succeed(
                                     generateResponse(
-                                        buildSpeechletResponse(r, false),
+                                        buildSpeechletResponse(r, true),
                                         {}
                                     ))
                             }, function error(msg) {
                                 context.succeed(
                                     generateResponse(
-                                        buildSpeechletResponse(msg, false),
+                                        buildSpeechletResponse(msg, true),
                                         {}
                                     ))
                             });
@@ -180,7 +180,7 @@ exports.handler = (event, context, callback) => {
                         default:
                             context.succeed(
                                 generateResponse(
-                                    buildSpeechletResponse(`Darauf habe ich keine Antwort`, false),
+                                    buildSpeechletResponse(`Darauf habe ich keine Antwort`, true),
                                     {}
                                 ))
 
@@ -222,6 +222,22 @@ buildSpeechletResponse = (outputText, shouldEndSession) => {
 
 }
 
+// Helpers
+buildLinkedSpeechletResponse = (outputText, shouldEndSession) => {
+
+    return {
+        outputSpeech: {
+            type: "SSML",
+            ssml: "<speak>" + outputText + "</speak>"
+        },
+        shouldEndSession: shouldEndSession,
+        card: {
+            type: "LinkAccount"
+        }
+    }
+
+}
+
 generateResponse = (speechletResponse, sessionAttributes) => {
 
     return {
@@ -231,6 +247,8 @@ generateResponse = (speechletResponse, sessionAttributes) => {
     }
 
 }
+
+
 
 
 /**
