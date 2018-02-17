@@ -37,7 +37,7 @@ exports.handler = (event, context, callback) => {
                 if (event.session.user.accessToken == undefined) {
                     context.succeed(
                         generateResponse(
-                            buildSpeechletResponse(`Sie müssen sich erst in Moodle Anmelden, gehen Sie in die Alexa App und aktivieren Sie den Skill.`, true),
+                            buildLinkedSpeechletResponse(`Du kannst diesen Skill nur verwenden, wenn Du in die Alexa App gehst und Dein Konto mit deinen Anmeldedaten verknüpfst und die Einrichtung abschließt.`, true),
                             {}
                         ))
                 }
