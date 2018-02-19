@@ -18,14 +18,14 @@ if ($array["token"]) {
 	curl_setopt($ch2, CURLOPT_URL,$url);
 	$content2 = curl_exec($ch2);
 	$array2 = json_decode($content2, true); // decode json
-	if (strlen($_REQUEST["redirect_uri"])!=0 && strlen($_REQUEST["state"])!=0) {
+	//if (strlen($_REQUEST["redirect_uri"])!=0 && strlen($_REQUEST["state"])!=0) {
 		header("Location: ".$_REQUEST["redirect_uri"]."#state=".$_REQUEST["state"]."&access_token=".$_REQUEST["Server"]."@".$_REQUEST["Path"]."@".$array["token"]."@".$array2["userid"]."&token_type=Bearer");
 		die();
-	}
-	else {
-		header("Location: https://service.joerg-tuttas.de/alexa.php?msg=Login%20korrekt,%20aber%20kein%20Parameter%20%27redirect_uri%27%20bzw.%20%27state%27%20gefunden!");
-		die();				
-	}
+	//}
+	//else {
+	//	header("Location: https://service.joerg-tuttas.de/alexa.php?msg=Login%20korrekt,%20aber%20kein%20Parameter%20%27redirect_uri%27%20bzw.%20%27state%27%20gefunden!");
+	//	die();				
+	//}
 }
 else {
 	header("Location: https://service.joerg-tuttas.de/alexa.php?msg=Login%20fehlgeschlagen");
