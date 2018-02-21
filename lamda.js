@@ -23,7 +23,7 @@ exports.handler = (event, context, callback) => {
                 else {
                     context.succeed(
                         generateResponse(
-                            buildSpeechletResponse("Willkommenn zur multi media berufsbildende Schule in Hannover", true),
+                            buildSpeechletResponse("Willkommenn zur multi media berufsbildende Schule in Hannover. Fragen Sie zum Beispiel, Alexa frage Multimedia Schule wie sind meine Aufgaben? oder, Alexa frage Multimedia Schule habe ich neue Nachrichten?", true),
                             {}
                         )
                     )
