@@ -4,7 +4,7 @@
 //echo "Password=".$_REQUEST["Password"];
 error_log("Alexa state:".$_REQUEST["state"]."\n", 3, "/var/tmp/errors.log");
 error_log("Alexa redirect:".$_REQUEST["redirect_uri"]."\n", 3, "/var/tmp/errors.log");
-$url = $_REQUEST["Server"].$_REQUEST["Path"].'/login/token.php?username='.urldecode($_REQUEST["Username"]).'&password='.urldecode($_REQUEST["Password"]).'&service=moodle_mobile_app';
+$url = $_REQUEST["Server"].$_REQUEST["Path"].'/login/token.php?username='.urlencode($_REQUEST["Username"]).'&password='.urlencode($_REQUEST["Password"]).'&service=moodle_mobile_app';
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_URL,$url);
